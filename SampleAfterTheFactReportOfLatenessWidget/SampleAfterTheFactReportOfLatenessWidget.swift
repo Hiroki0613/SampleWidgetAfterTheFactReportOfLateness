@@ -21,14 +21,14 @@ struct Provider: TimelineProvider {
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         var entries: [SimpleEntry] = []
 
-        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
+        // 15分間隔での更新要求をするTimelineを生成
         let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate)
+        for hourOffset in 0 ..< 96 {
+            let entryDate = Calendar.current.date(byAdding: .minute, value: 15, to: currentDate) ?? Date()
+            let startOfDate = Calendar.current.startOfDay(for: entryDate)
+            let entry = SimpleEntry(date: startOfDate)
             entries.append(entry)
         }
-
         let timeline = Timeline(entries: entries, policy: .atEnd)
         completion(timeline)
     }
